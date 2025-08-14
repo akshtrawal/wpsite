@@ -36,7 +36,7 @@ add_action( 'customize_register', function ( $wp_customize ) {
 	) );
 	$wp_customize->add_control( 'vrtech_contact_email', array(
 		'label'   => __( 'Contact form recipient email', 'vrtechglobal' ),
-		' section' => 'title_tagline',
+		'section' => 'title_tagline',
 		'type'    => 'email',
 	) );
 } );
