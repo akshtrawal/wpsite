@@ -41,6 +41,7 @@
 			);
 			?>
 		</nav>
+		<a class="button button-primary header-cta" href="<?php echo esc_url( home_url( '/contact' ) ); ?>"><?php esc_html_e( 'Get a consultation', 'vrtechglobal' ); ?></a>
 	</div>
 </header>
 <main class="site-main">
