@@ -30,11 +30,17 @@
 		</button>
 		<nav id="site-navigation" class="main-navigation" aria-label="<?php esc_attr_e( 'Primary', 'vrtechglobal' ); ?>">
 			<?php
+			$menu_exists = has_nav_menu( 'primary' );
 			wp_nav_menu(
 				array(
 					'theme_location' => 'primary',
 					'menu_id'        => 'primaryMenu',
 					'container'      => false,
+					'fallback_cb'    => $menu_exists ? false : function () {
+						echo '<ul id="primaryMenu" class="menu">';
+						wp_list_pages( array( 'title_li' => '' ) );
+						echo '</ul>';
+					},
 				)
 			);
 			?>
