@@ -36,11 +36,7 @@
 					'theme_location' => 'primary',
 					'menu_id'        => 'primaryMenu',
 					'container'      => false,
-					'fallback_cb'    => $menu_exists ? false : function () {
-						echo '<ul id="primaryMenu" class="menu">';
-						wp_list_pages( array( 'title_li' => '' ) );
-						echo '</ul>';
-					},
+					'fallback_cb'    => $menu_exists ? false : 'vrtech_menu_fallback',
 				)
 			);
 			?>
