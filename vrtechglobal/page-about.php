@@ -18,10 +18,12 @@ get_header(); ?>
 	<h2>Founding Team</h2>
 	<div class="grid grid-2 team-grid">
 		<div class="card team-card">
+			<img class="team-photo" src="https://i.pravatar.cc/240?img=12" alt="Ragu" loading="lazy" />
 			<h3>Ragu</h3>
 			<p>Founder and Principal Consultant. Experienced in Dynamics 365 implementations across multiple industries.</p>
 		</div>
 		<div class="card team-card">
+			<img class="team-photo" src="https://i.pravatar.cc/240?img=32" alt="Vipul" loading="lazy" />
 			<h3>Vipul</h3>
 			<p>Founder and Principal Consultant. Expert in digital transformation strategy and delivery.</p>
 		</div>
