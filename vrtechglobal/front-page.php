@@ -6,6 +6,9 @@
  */
 
 get_header(); ?>
+<?php if ( function_exists( 'elementor_theme_do_location' ) && elementor_theme_do_location( 'single' ) ) : ?>
+	<?php // Elementor Single template will render the page. ?>
+<?php else : ?>
 <section class="hero">
 	<div class="container">
 		<div class="hero-slider" id="heroSlider">
@@ -131,5 +134,5 @@ get_header(); ?>
 		</div>
 	</div>
 </section>
-
+<?php endif; ?>
 <?php get_footer(); ?>

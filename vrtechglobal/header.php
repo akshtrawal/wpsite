@@ -13,6 +13,7 @@
 </head>
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
+<?php if ( ! ( function_exists( 'elementor_theme_do_location' ) && elementor_theme_do_location( 'header' ) ) ) : ?>
 <header class="site-header">
 	<div class="container header-inner">
 		<div class="brand">
@@ -44,4 +45,5 @@
 		<a class="button button-primary header-cta" href="<?php echo esc_url( home_url( '/contact' ) ); ?>"><?php esc_html_e( 'Get a consultation', 'vrtechglobal' ); ?></a>
 	</div>
 </header>
+<?php endif; ?>
 <main class="site-main">

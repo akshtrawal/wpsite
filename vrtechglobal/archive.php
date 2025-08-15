@@ -6,6 +6,9 @@
  */
 
 get_header(); ?>
+<?php if ( function_exists( 'elementor_theme_do_location' ) && elementor_theme_do_location( 'archive' ) ) : ?>
+	<?php // Elementor Archive template will render here. ?>
+<?php else : ?>
 <section class="page-hero small"><div class="container"><h1><?php the_archive_title(); ?></h1></div></section>
 <section class="container section">
 	<?php if ( have_posts() ) : ?>
@@ -22,4 +25,5 @@ get_header(); ?>
 		<p><?php esc_html_e( 'No posts found.', 'vrtechglobal' ); ?></p>
 	<?php endif; ?>
 </section>
+<?php endif; ?>
 <?php get_footer(); ?>

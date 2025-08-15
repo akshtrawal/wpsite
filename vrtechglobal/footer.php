@@ -6,6 +6,7 @@
  */
 ?>
 </main>
+<?php if ( ! ( function_exists( 'elementor_theme_do_location' ) && elementor_theme_do_location( 'footer' ) ) ) : ?>
 <footer class="site-footer">
 	<div class="container">
 		<div class="footer-top grid grid-3">
@@ -51,6 +52,7 @@
 		<p class="copyright">&copy; <?php echo esc_html( date( 'Y' ) ); ?> <?php bloginfo( 'name' ); ?>. <?php esc_html_e( 'All rights reserved.', 'vrtechglobal' ); ?></p>
 	</div>
 </footer>
+<?php endif; ?>
 <?php wp_footer(); ?>
 </body>
 </html>

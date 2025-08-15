@@ -6,6 +6,9 @@
  */
 
 get_header(); ?>
+<?php if ( function_exists( 'elementor_theme_do_location' ) && elementor_theme_do_location( 'single' ) ) : ?>
+	<?php // Elementor Single template will render the post. ?>
+<?php else : ?>
 <section class="page-hero small"><div class="container"><h1><?php the_title(); ?></h1></div></section>
 <section class="container section">
 	<?php while ( have_posts() ) : the_post(); ?>
@@ -15,4 +18,5 @@ get_header(); ?>
 		</article>
 	<?php endwhile; ?>
 </section>
+<?php endif; ?>
 <?php get_footer(); ?>
