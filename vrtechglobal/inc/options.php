@@ -5,6 +5,26 @@
  * @package vrtechglobal
  */
 
+if ( ! function_exists( 'vrtech_sanitize_hero_slides' ) ) {
+	function vrtech_sanitize_hero_slides( $value ) {
+		if ( is_array( $value ) ) {
+			return wp_json_encode( $value );
+		}
+		if ( is_string( $value ) ) {
+			$value = trim( wp_unslash( $value ) );
+			if ( $value === '' ) {
+				return '';
+			}
+			$decoded = json_decode( $value, true );
+			if ( is_array( $decoded ) ) {
+				return wp_json_encode( $decoded );
+			}
+			return sanitize_textarea_field( $value );
+		}
+		return '';
+	}
+}
+
 add_action( 'customize_register', function ( $wp_customize ) {
 	$wp_customize->add_section( 'vrtech_home', array(
 		'title'    => __( 'Homepage', 'vrtechglobal' ),
@@ -12,14 +32,9 @@ add_action( 'customize_register', function ( $wp_customize ) {
 	) );
 
 	$wp_customize->add_setting( 'vrtech_hero_slides', array(
-		'default'           => array(),
+		'default'           => '',
 		'transport'         => 'refresh',
-		'sanitize_callback' => function ( $value ) {
-			if ( empty( $value ) ) { return ''; }
-			if ( is_array( $value ) ) { return $value; }
-			$decoded = json_decode( wp_unslash( $value ), true );
-			return is_array( $decoded ) ? wp_json_encode( $decoded ) : '';
-		},
+		'sanitize_callback' => 'vrtech_sanitize_hero_slides',
 	) );
 	$wp_customize->add_control( new WP_Customize_Control( $wp_customize, 'vrtech_hero_slides_control', array(
 		'label'       => __( 'Hero Slides (JSON array of {title,desc,btn,url,image})', 'vrtechglobal' ),

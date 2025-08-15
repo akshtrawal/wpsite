@@ -36,8 +36,8 @@ get_header(); ?>
 					'image' => 'https://picsum.photos/seed/vrtech-analytics/1200/640',
 				),
 			);
-			$slides_json = get_theme_mod( 'vrtech_hero_slides', '' );
-			$slides      = is_string( $slides_json ) && ! empty( $slides_json ) ? json_decode( $slides_json, true ) : $default_slides;
+			$slides_raw = get_theme_mod( 'vrtech_hero_slides', '' );
+			$slides     = is_string( $slides_raw ) && $slides_raw !== '' ? json_decode( $slides_raw, true ) : array();
 			if ( empty( $slides ) || ! is_array( $slides ) ) { $slides = $default_slides; }
 			foreach ( $slides as $slide ) : ?>
 				<div class="hero-slide" data-aos="fade">
