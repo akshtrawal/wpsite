@@ -9,6 +9,7 @@ get_header();
 
 $success_message = '';
 $error_message   = '';
+$recipient_email = get_theme_mod( 'vrtech_contact_email', get_option( 'admin_email' ) );
 
 if ( 'POST' === $_SERVER['REQUEST_METHOD'] && isset( $_POST['vrtech_contact_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['vrtech_contact_nonce'] ) ), 'vrtech_contact' ) ) {
 	$company = isset( $_POST['company'] ) ? sanitize_text_field( wp_unslash( $_POST['company'] ) ) : '';
@@ -21,7 +22,7 @@ if ( 'POST' === $_SERVER['REQUEST_METHOD'] && isset( $_POST['vrtech_contact_nonc
 	} elseif ( ! is_email( $email ) ) {
 		$error_message = __( 'Please enter a valid email address.', 'vrtechglobal' );
 	} else {
-		$to      = get_option( 'admin_email' );
+		$to      = $recipient_email;
 		$subject = 'New enquiry from VRTechGlobal website';
 		$body    = "Company: {$company}\nMobile: {$mobile}\nEmail: {$email}\n\nComments:\n{$message}";
 		$headers = array( 'Content-Type: text/plain; charset=UTF-8', "Reply-To: {$email}" );
@@ -70,7 +71,7 @@ if ( 'POST' === $_SERVER['REQUEST_METHOD'] && isset( $_POST['vrtech_contact_nonc
 			<div class="card">
 				<h3><?php esc_html_e( 'Need immediate assistance?', 'vrtechglobal' ); ?></h3>
 				<p><?php esc_html_e( 'Email us and we will reach out within 1 business day.', 'vrtechglobal' ); ?></p>
-				<p><strong><?php echo esc_html( get_option( 'admin_email' ) ); ?></strong></p>
+				<p><strong><?php echo esc_html( $recipient_email ); ?></strong></p>
 			</div>
 		</div>
 	</div>
