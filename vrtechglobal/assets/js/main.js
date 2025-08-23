@@ -23,6 +23,9 @@
         
         // Initialize AOS animations
         initAOS();
+
+        // Initialize scroll effects
+        initScrollEffects();
     });
     
     /**
@@ -78,22 +81,23 @@
     }
     
     /**
-     * Smooth scroll for anchor links
+     * Smooth scroll for anchor links with header offset
      */
     function initSmoothScroll() {
         const anchorLinks = document.querySelectorAll('a[href^="#"]');
+        const header = document.querySelector('.site-header');
         
         anchorLinks.forEach(link => {
             link.addEventListener('click', function(e) {
                 const href = this.getAttribute('href');
+                if (!href || href === '#') return;
                 const target = document.querySelector(href);
                 
                 if (target) {
                     e.preventDefault();
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+                    const headerHeight = header ? header.offsetHeight : 0;
+                    const targetTop = target.getBoundingClientRect().top + window.scrollY - headerHeight - 8;
+                    window.scrollTo({ top: targetTop, behavior: 'smooth' });
                 }
             });
         });
@@ -149,6 +153,59 @@
                 });
             });
         });
+    }
+
+    /**
+     * Initialize scroll-linked effects: header shrink, progress bar, hero parallax
+     */
+    function initScrollEffects() {
+        const header = document.querySelector('.site-header');
+        const progress = document.getElementById('scrollProgress');
+        const heroImages = document.querySelectorAll('.hero .hero-media img');
+
+        let lastKnownScrollY = 0;
+        let ticking = false;
+
+        function onScroll() {
+            lastKnownScrollY = window.scrollY || window.pageYOffset;
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    updateHeader(lastKnownScrollY);
+                    updateProgress(lastKnownScrollY);
+                    updateHeroParallax(lastKnownScrollY);
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }
+
+        function updateHeader(scrollY) {
+            if (!header) return;
+            if (scrollY > 12) {
+                header.classList.add('is-scrolled');
+            } else {
+                header.classList.remove('is-scrolled');
+            }
+        }
+
+        function updateProgress(scrollY) {
+            if (!progress) return;
+            const docHeight = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+            const viewport = window.innerHeight;
+            const maxScrollable = docHeight - viewport;
+            const pct = maxScrollable > 0 ? Math.min(100, Math.max(0, (scrollY / maxScrollable) * 100)) : 0;
+            progress.style.width = pct + '%';
+        }
+
+        function updateHeroParallax(scrollY) {
+            if (!heroImages || heroImages.length === 0) return;
+            const maxShift = 24; // px
+            const shift = Math.max(0, Math.min(maxShift, scrollY * 0.15));
+            heroImages.forEach(img => img.style.setProperty('--parallax-y', shift + 'px'));
+        }
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll(); // initial
     }
     
     // Initialize additional features when DOM is ready

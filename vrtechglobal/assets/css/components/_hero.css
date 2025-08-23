@@ -35,10 +35,12 @@
     height: auto;
     display: block;
     transition: transform 0.5s ease;
+    will-change: transform;
+    transform: translateY(var(--parallax-y, 0));
 }
 
 .hero-slide:hover .hero-media img {
-    transform: scale(1.05);
+    transform: translateY(var(--parallax-y, 0)) scale(1.05);
 }
 
 .hero-content {

@@ -108,6 +108,28 @@
     box-shadow: 0 8px 25px rgba(45, 212, 191, 0.3);
 }
 
+.site-header.is-scrolled {
+	background: rgba(11, 14, 17, 0.92);
+	backdrop-filter: blur(10px);
+	box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+
+.site-header.is-scrolled .header-inner {
+	height: 56px;
+}
+
+/* Scroll Progress Bar */
+.scroll-progress {
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 3px;
+	width: 0;
+	background: linear-gradient(90deg, var(--primary), var(--accent));
+	z-index: 60;
+	transition: width 0.08s linear;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .nav-toggle {

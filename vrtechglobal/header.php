@@ -13,6 +13,7 @@
 </head>
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
+<div class="scroll-progress" id="scrollProgress"></div>
 <?php if ( ! ( function_exists( 'elementor_theme_do_location' ) && elementor_theme_do_location( 'header' ) ) ) : ?>
 <header class="site-header">
 	<div class="container header-inner">
@@ -46,4 +47,4 @@
 	</div>
 </header>
 <?php endif; ?>
-<main class="site-main">
+<main class="site-main" data-header-offset="true">
