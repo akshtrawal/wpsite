@@ -278,3 +278,16 @@
         padding: 40px 0;
     }
 }
+
+/* About floating shapes */
+.about-hero .hero-graphic { position: relative; height: 300px; }
+.about-hero .floating-shapes { position: relative; width: 100%; height: 100%; }
+.about-hero .shape { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.08); }
+.about-hero .shape-1 { width: 120px; height: 120px; top: 20px; right: 50px; }
+.about-hero .shape-2 { width: 80px; height: 80px; bottom: 40px; right: 150px; }
+.about-hero .shape-3 { width: 60px; height: 60px; top: 100px; right: 200px; }
+
+/* Services hero icons */
+.services-hero .services-visual { display: flex; gap: 12px; flex-wrap: wrap; justify-content: flex-end; }
+.services-hero .service-icon { width: 56px; height: 56px; display: inline-flex; align-items: center; justify-content: center; border-radius: 14px; background: linear-gradient(135deg, var(--primary), var(--accent)); box-shadow: 0 10px 24px rgba(0,0,0,0.2); }
+.services-hero .service-icon svg { width: 26px; height: 26px; color: #00110e; }
