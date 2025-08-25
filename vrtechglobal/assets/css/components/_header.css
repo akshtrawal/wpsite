@@ -138,7 +138,7 @@
     
     .main-navigation {
         position: absolute;
-        top: 64px;
+        top: var(--header-offset, 64px);
         left: 0;
         right: 0;
         background: var(--bg-alt);
@@ -181,6 +181,6 @@
     }
     
     .main-navigation {
-        top: 56px;
+        top: var(--header-offset, 64px);
     }
 }

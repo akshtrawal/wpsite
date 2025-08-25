@@ -11,6 +11,7 @@
 	--primary-700: #14b8a6;
 	--accent: #60a5fa;
 	--danger: #ef4444;
+	--header-offset: 64px;
 }
 
 /* Import Component Stylesheets */
@@ -44,6 +45,11 @@
 .rich-text p { 
     margin: 0 0 14px; 
 	color: var(--text);
+}
+
+/* Anchor offset for sticky header */
+[id] {
+	scroll-margin-top: calc(var(--header-offset, 64px) + 8px);
 }
 
 /* Animation Helpers */
@@ -87,6 +93,20 @@
 *:focus {
     outline: 2px solid var(--primary);
     outline-offset: 2px;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+	* {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+
+	.scroll-progress {
+		transition: none !important;
+	}
 }
 
 /* Print Styles */

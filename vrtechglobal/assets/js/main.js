@@ -26,6 +26,9 @@
 
         // Initialize scroll effects
         initScrollEffects();
+
+        // Sync header offset CSS variable
+        updateHeaderOffsetVar();
     });
     
     /**
@@ -86,6 +89,7 @@
     function initSmoothScroll() {
         const anchorLinks = document.querySelectorAll('a[href^="#"]');
         const header = document.querySelector('.site-header');
+        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         
         anchorLinks.forEach(link => {
             link.addEventListener('click', function(e) {
@@ -97,7 +101,7 @@
                     e.preventDefault();
                     const headerHeight = header ? header.offsetHeight : 0;
                     const targetTop = target.getBoundingClientRect().top + window.scrollY - headerHeight - 8;
-                    window.scrollTo({ top: targetTop, behavior: 'smooth' });
+                    window.scrollTo({ top: targetTop, behavior: prefersReduced ? 'auto' : 'smooth' });
                 }
             });
         });
@@ -162,6 +166,7 @@
         const header = document.querySelector('.site-header');
         const progress = document.getElementById('scrollProgress');
         const heroImages = document.querySelectorAll('.hero .hero-media img');
+        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
         let lastKnownScrollY = 0;
         let ticking = false;
@@ -172,7 +177,9 @@
                 window.requestAnimationFrame(() => {
                     updateHeader(lastKnownScrollY);
                     updateProgress(lastKnownScrollY);
-                    updateHeroParallax(lastKnownScrollY);
+                    if (!prefersReduced) {
+                        updateHeroParallax(lastKnownScrollY);
+                    }
                     ticking = false;
                 });
                 ticking = true;
@@ -206,6 +213,24 @@
 
         window.addEventListener('scroll', onScroll, { passive: true });
         onScroll(); // initial
+    }
+    
+    /**
+     * Keep --header-offset CSS variable in sync with current header height
+     */
+    function updateHeaderOffsetVar() {
+        const header = document.querySelector('.site-header');
+        if (!header) return;
+        const root = document.documentElement;
+        const apply = () => root.style.setProperty('--header-offset', header.offsetHeight + 'px');
+        apply();
+        // Observe header size changes
+        if ('ResizeObserver' in window) {
+            const ro = new ResizeObserver(apply);
+            ro.observe(header);
+        } else {
+            window.addEventListener('resize', apply);
+        }
     }
     
     // Initialize additional features when DOM is ready
