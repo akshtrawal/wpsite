@@ -6,7 +6,7 @@
 
 class StatsCounter {
     constructor() {
-        this.statElements = document.querySelectorAll('.stat-value[data-count]');
+        this.statElements = document.querySelectorAll('.stat-value[data-count], .stat-number[data-count]');
         this.animationSpeed = 200; // The lower the slower
         this.hasAnimated = false;
         
@@ -37,7 +37,7 @@ class StatsCounter {
         }, options);
         
         // Observe the stats section
-        const statsSection = document.querySelector('.stats-section');
+        const statsSection = document.querySelector('.stats-section') || document.querySelector('.about-intro') || document.body;
         if (statsSection) {
             observer.observe(statsSection);
         }

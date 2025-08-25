@@ -137,6 +137,50 @@ a.button {
     transform: translateY(-2px);
 }
 
+/* New .btn utility aliases */
+.btn { 
+    display: inline-block; 
+    padding: 12px 18px; 
+    border-radius: 10px; 
+    font-weight: 600; 
+    text-decoration: none; 
+    transition: all 0.3s ease; 
+    border: 0; 
+    cursor: pointer; 
+}
+
+.btn-primary { 
+    background: linear-gradient(135deg, var(--primary), var(--primary-700)); 
+    color: #00110e; 
+}
+
+.btn-primary:hover { 
+    transform: translateY(-2px); 
+    box-shadow: 0 8px 25px rgba(45, 212, 191, 0.3); 
+}
+
+.btn-secondary { 
+    background: #1f2733; 
+    color: var(--text); 
+    border: 1px solid #2b3647; 
+}
+
+.btn-secondary:hover { 
+    background: #253144; 
+    transform: translateY(-2px); 
+}
+
+.btn-outline { 
+    background: transparent; 
+    color: var(--text); 
+    border: 1px solid #2b3647; 
+}
+
+.btn-outline:hover { 
+    background: #1a2230; 
+    transform: translateY(-2px); 
+}
+
 /* Form Elements */
 .contact-form label { 
     display: block; 
