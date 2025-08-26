@@ -17,7 +17,7 @@
         // Import component scripts
         const localizedUri = (window.VRTECH_GLOBAL && window.VRTECH_GLOBAL.themeUri) ? window.VRTECH_GLOBAL.themeUri : '';
         const themeUri = localizedUri || document.documentElement.getAttribute('data-theme-uri') || '';
-        loadScript((themeUri ? themeUri + '/' : '') + 'assets/js/components/hero-slider.js');
+        // Removed dynamic load for hero-slider; inlined below for reliability
         loadScript((themeUri ? themeUri + '/' : '') + 'assets/js/components/stats-counter.js');
         
         // Initialize mobile navigation
@@ -28,6 +28,9 @@
 
         // Initialize scroll effects
         initScrollEffects();
+
+        // Initialize Hero slider (inline fallback)
+        initHeroSlider();
 
         // Sync header offset CSS variable
         updateHeaderOffsetVar();
@@ -215,6 +218,54 @@
 
         window.addEventListener('scroll', onScroll, { passive: true });
         onScroll(); // initial
+    }
+    
+    /**
+     * Inline, robust Hero Slider
+     */
+    function initHeroSlider() {
+        const slider = document.getElementById('heroSlider');
+        if (!slider) return;
+        const slides = Array.prototype.slice.call(slider.querySelectorAll('.hero-slide'));
+        if (!slides.length) return;
+
+        let currentIndex = 0;
+        let intervalId = null;
+        const delayMs = 4500;
+
+        function show(index) {
+            slides.forEach((s, i) => {
+                if (i === index) {
+                    s.classList.add('active');
+                } else {
+                    s.classList.remove('active');
+                }
+            });
+        }
+
+        function next() {
+            currentIndex = (currentIndex + 1) % slides.length;
+            show(currentIndex);
+        }
+
+        function start() {
+            if (intervalId) return;
+            intervalId = setInterval(next, delayMs);
+        }
+
+        function stop() {
+            if (!intervalId) return;
+            clearInterval(intervalId);
+            intervalId = null;
+        }
+
+        // Hover pause
+        slider.addEventListener('mouseenter', stop);
+        slider.addEventListener('mouseleave', start);
+
+        // Initialize
+        show(0);
+        start();
     }
     
     /**
