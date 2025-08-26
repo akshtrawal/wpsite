@@ -15,7 +15,8 @@
 
 	ready(function(){
         // Import component scripts
-        const themeUri = document.documentElement.getAttribute('data-theme-uri') || '';
+        const localizedUri = (window.VRTECH_GLOBAL && window.VRTECH_GLOBAL.themeUri) ? window.VRTECH_GLOBAL.themeUri : '';
+        const themeUri = localizedUri || document.documentElement.getAttribute('data-theme-uri') || '';
         loadScript((themeUri ? themeUri + '/' : '') + 'assets/js/components/hero-slider.js');
         loadScript((themeUri ? themeUri + '/' : '') + 'assets/js/components/stats-counter.js');
         

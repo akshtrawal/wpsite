@@ -19,4 +19,7 @@ add_action( 'wp_enqueue_scripts', function () {
 	// Scripts
 	wp_enqueue_script( 'vrtech-aos', 'https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js', array(), '2.3.4', true );
 	wp_enqueue_script( 'vrtech-main', VRTECH_THEME_URI . '/assets/js/main.js', array( 'vrtech-aos' ), VRTECH_THEME_VERSION, true );
+	wp_localize_script( 'vrtech-main', 'VRTECH_GLOBAL', array(
+		'themeUri' => esc_url_raw( VRTECH_THEME_URI ),
+	) );
 } );

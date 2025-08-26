@@ -140,7 +140,11 @@ class HeroSlider {
     }
 }
 
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-    new HeroSlider();
-});
+// Initialize regardless of when this script loads
+(function initHeroSlider(){
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => new HeroSlider());
+    } else {
+        new HeroSlider();
+    }
+})();
