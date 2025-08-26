@@ -14,14 +14,6 @@
 	--header-offset: 64px;
 }
 
-/* Import Component Stylesheets */
-@import url('components/_utilities.css');
-@import url('components/_header.css');
-@import url('components/_hero.css');
-@import url('components/_sections.css');
-@import url('components/_footer.css');
-@import url('components/_newsletter.css');
-
 /* Additional Global Styles */
 .page-hero.small { 
     background: var(--bg-alt); 
@@ -45,11 +37,6 @@
 .rich-text p { 
     margin: 0 0 14px; 
 	color: var(--text);
-}
-
-/* Anchor offset for sticky header */
-[id] {
-	scroll-margin-top: calc(var(--header-offset, 64px) + 8px);
 }
 
 /* Animation Helpers */
@@ -93,6 +80,11 @@
 *:focus {
     outline: 2px solid var(--primary);
     outline-offset: 2px;
+}
+
+/* Anchor offset for sticky header */
+[id] {
+	scroll-margin-top: calc(var(--header-offset, 64px) + 8px);
 }
 
 /* Reduced motion support */
