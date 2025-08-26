@@ -29,7 +29,7 @@
         // Initialize scroll effects
         initScrollEffects();
 
-        // Initialize Hero slider (inline fallback)
+        // Initialize Hero slider (inline, horizontal)
         initHeroSlider();
 
         // Sync header offset CSS variable
@@ -165,12 +165,13 @@
     }
 
     /**
-     * Initialize scroll-linked effects: header shrink, progress bar, hero parallax
+     * Initialize scroll-linked effects: header shrink, progress bar
+     * Note: Parallax disabled for hero slider by targeting only .js-parallax
      */
     function initScrollEffects() {
         const header = document.querySelector('.site-header');
         const progress = document.getElementById('scrollProgress');
-        const heroImages = document.querySelectorAll('.hero .hero-media img');
+        const parallaxImages = document.querySelectorAll('.js-parallax');
         const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
         let lastKnownScrollY = 0;
@@ -183,7 +184,7 @@
                     updateHeader(lastKnownScrollY);
                     updateProgress(lastKnownScrollY);
                     if (!prefersReduced) {
-                        updateHeroParallax(lastKnownScrollY);
+                        updateParallax(lastKnownScrollY);
                     }
                     ticking = false;
                 });
@@ -209,11 +210,11 @@
             progress.style.width = pct + '%';
         }
 
-        function updateHeroParallax(scrollY) {
-            if (!heroImages || heroImages.length === 0) return;
+        function updateParallax(scrollY) {
+            if (!parallaxImages || parallaxImages.length === 0) return;
             const maxShift = 24; // px
             const shift = Math.max(0, Math.min(maxShift, scrollY * 0.15));
-            heroImages.forEach(img => img.style.setProperty('--parallax-y', shift + 'px'));
+            parallaxImages.forEach(img => img.style.setProperty('--parallax-y', shift + 'px'));
         }
 
         window.addEventListener('scroll', onScroll, { passive: true });
@@ -221,13 +222,32 @@
     }
     
     /**
-     * Inline, robust Hero Slider with swipe/drag support
+     * Inline, robust Hero Slider with horizontal swipe/drag
      */
     function initHeroSlider() {
-        const slider = document.getElementById('heroSlider');
-        if (!slider) return;
-        const slides = Array.prototype.slice.call(slider.querySelectorAll('.hero-slide'));
+        const track = document.getElementById('heroSlider');
+        if (!track) return;
+        const slides = Array.prototype.slice.call(track.querySelectorAll('.hero-slide'));
         if (!slides.length) return;
+
+        // Wrap track with a viewport to hide overflow
+        if (!track.parentElement.classList.contains('hero-viewport')) {
+            const viewport = document.createElement('div');
+            viewport.className = 'hero-viewport';
+            track.parentElement.insertBefore(viewport, track);
+            viewport.appendChild(track);
+        }
+
+        // Prepare track for horizontal sliding
+        track.style.display = 'flex';
+        track.style.willChange = 'transform';
+        track.style.transform = 'translateX(0)';
+        track.classList.add('is-ready');
+        slides.forEach(function(slide){
+            slide.style.minWidth = '100%';
+            slide.style.flex = '0 0 100%';
+            slide.style.display = 'block';
+        });
 
         let currentIndex = 0;
         let intervalId = null;
@@ -236,25 +256,14 @@
         let startX = 0;
         let isMouseDown = false;
 
-        function show(index) {
-            slides.forEach((s, i) => {
-                if (i === index) {
-                    s.classList.add('active');
-                } else {
-                    s.classList.remove('active');
-                }
-            });
+        function goTo(index) {
+            currentIndex = (index + slides.length) % slides.length;
+            track.style.transition = 'transform 0.5s ease';
+            track.style.transform = 'translateX(' + (-currentIndex * 100) + '%)';
         }
 
-        function next() {
-            currentIndex = (currentIndex + 1) % slides.length;
-            show(currentIndex);
-        }
-
-        function prev() {
-            currentIndex = currentIndex === 0 ? slides.length - 1 : currentIndex - 1;
-            show(currentIndex);
-        }
+        function next() { goTo(currentIndex + 1); }
+        function prev() { goTo(currentIndex - 1); }
 
         function start() {
             if (intervalId) return;
@@ -270,51 +279,59 @@
         function handleSwipe(start, end) {
             const diff = start - end;
             if (Math.abs(diff) < swipeThreshold) return;
-            if (diff > 0) {
-                next();
-            } else {
-                prev();
-            }
+            if (diff > 0) { next(); } else { prev(); }
         }
 
         // Touch swipe
-        slider.addEventListener('touchstart', function(e){
+        track.addEventListener('touchstart', function(e){
             if (!e.touches || !e.touches[0]) return;
             startX = e.touches[0].clientX;
             stop();
+            // disable transition during drag for smoother feel
+            track.style.transition = 'none';
         }, { passive: true });
-        slider.addEventListener('touchend', function(e){
-            if (!e.changedTouches || !e.changedTouches[0]) { start(); return; }
+        track.addEventListener('touchmove', function(e){
+            if (!e.touches || !e.touches[0]) return;
+            const currentX = e.touches[0].clientX;
+            const delta = currentX - startX;
+            track.style.transform = 'translateX(calc(' + (-currentIndex * 100) + '% + ' + delta + 'px))';
+        }, { passive: true });
+        track.addEventListener('touchend', function(e){
+            track.style.transition = 'transform 0.5s ease';
+            if (!e.changedTouches || !e.changedTouches[0]) { goTo(currentIndex); start(); return; }
             const endX = e.changedTouches[0].clientX;
             handleSwipe(startX, endX);
             start();
         });
 
-        // Mouse drag (basic)
-        slider.addEventListener('mousedown', function(e){
+        // Mouse drag
+        track.addEventListener('mousedown', function(e){
             isMouseDown = true;
             startX = e.clientX;
             stop();
+            track.style.transition = 'none';
+        });
+        document.addEventListener('mousemove', function(e){
+            if (!isMouseDown) return;
+            const currentX = e.clientX;
+            const delta = currentX - startX;
+            track.style.transform = 'translateX(calc(' + (-currentIndex * 100) + '% + ' + delta + 'px))';
         });
         document.addEventListener('mouseup', function(e){
             if (!isMouseDown) return;
             isMouseDown = false;
-            const endX = e.clientX;
-            handleSwipe(startX, endX);
+            track.style.transition = 'transform 0.5s ease';
+            handleSwipe(startX, e.clientX);
             start();
         });
 
         // Prevent image dragging
-        Array.prototype.forEach.call(slider.querySelectorAll('img'), function(img){
+        Array.prototype.forEach.call(track.querySelectorAll('img'), function(img){
             img.addEventListener('dragstart', function(ev){ ev.preventDefault(); });
         });
 
-        // Hover pause
-        slider.addEventListener('mouseenter', stop);
-        slider.addEventListener('mouseleave', start);
-
         // Initialize
-        show(0);
+        goTo(0);
         start();
     }
     

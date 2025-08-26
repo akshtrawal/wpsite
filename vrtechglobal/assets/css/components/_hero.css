@@ -12,15 +12,19 @@
     overflow: hidden;
 }
 
+/* New viewport wrapper to hide overflow during horizontal sliding */
+.hero-viewport { overflow: hidden; }
+
 .hero-slide {
     padding: 20px 0 10px;
     max-width: 720px;
-    display: none;
+    display: block; /* ensure visible in horizontal layout */
     animation: fadeIn 0.8s ease-in-out;
 }
 
-/* Fallback: show first slide if JS slider hasn't activated */
-.hero-slider .hero-slide:first-child { display: block; }
+/* Fallback: if JS not ready, show only the first slide stacked */
+.hero-slider:not(.is-ready) .hero-slide { display: none; }
+.hero-slider:not(.is-ready) .hero-slide:first-child { display: block; }
 
 .hero-slide.active {
     display: block;
@@ -39,10 +43,13 @@
     display: block;
     transition: transform 0.5s ease;
     will-change: transform;
-    transform: translateY(var(--parallax-y, 0));
 }
 
-.hero-slide:hover .hero-media img {
+/* Disable parallax on hero images by default; only enable via .js-parallax class */
+.hero .hero-media img { transform: none; }
+.hero .hero-media img.js-parallax { transform: translateY(var(--parallax-y, 0)); }
+
+.hero-slide:hover .hero-media img.js-parallax {
     transform: translateY(var(--parallax-y, 0)) scale(1.05);
 }
 
