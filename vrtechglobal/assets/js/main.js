@@ -221,7 +221,7 @@
     }
     
     /**
-     * Inline, robust Hero Slider
+     * Inline, robust Hero Slider with swipe/drag support
      */
     function initHeroSlider() {
         const slider = document.getElementById('heroSlider');
@@ -232,6 +232,9 @@
         let currentIndex = 0;
         let intervalId = null;
         const delayMs = 4500;
+        const swipeThreshold = 50;
+        let startX = 0;
+        let isMouseDown = false;
 
         function show(index) {
             slides.forEach((s, i) => {
@@ -248,6 +251,11 @@
             show(currentIndex);
         }
 
+        function prev() {
+            currentIndex = currentIndex === 0 ? slides.length - 1 : currentIndex - 1;
+            show(currentIndex);
+        }
+
         function start() {
             if (intervalId) return;
             intervalId = setInterval(next, delayMs);
@@ -258,6 +266,48 @@
             clearInterval(intervalId);
             intervalId = null;
         }
+
+        function handleSwipe(start, end) {
+            const diff = start - end;
+            if (Math.abs(diff) < swipeThreshold) return;
+            if (diff > 0) {
+                next();
+            } else {
+                prev();
+            }
+        }
+
+        // Touch swipe
+        slider.addEventListener('touchstart', function(e){
+            if (!e.touches || !e.touches[0]) return;
+            startX = e.touches[0].clientX;
+            stop();
+        }, { passive: true });
+        slider.addEventListener('touchend', function(e){
+            if (!e.changedTouches || !e.changedTouches[0]) { start(); return; }
+            const endX = e.changedTouches[0].clientX;
+            handleSwipe(startX, endX);
+            start();
+        });
+
+        // Mouse drag (basic)
+        slider.addEventListener('mousedown', function(e){
+            isMouseDown = true;
+            startX = e.clientX;
+            stop();
+        });
+        document.addEventListener('mouseup', function(e){
+            if (!isMouseDown) return;
+            isMouseDown = false;
+            const endX = e.clientX;
+            handleSwipe(startX, endX);
+            start();
+        });
+
+        // Prevent image dragging
+        Array.prototype.forEach.call(slider.querySelectorAll('img'), function(img){
+            img.addEventListener('dragstart', function(ev){ ev.preventDefault(); });
+        });
 
         // Hover pause
         slider.addEventListener('mouseenter', stop);
