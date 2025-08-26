@@ -101,6 +101,13 @@
 }
 
 .about-hero { background-color: var(--bg); }
+/* Replace with light blue gradient and theme overlay */
+.about-hero {
+	background:
+		radial-gradient(1200px 400px at 10% -10%, rgba(96, 165, 250, 0.35), transparent),
+		radial-gradient(1200px 400px at 90% -10%, rgba(45, 212, 191, 0.25), transparent),
+		linear-gradient(180deg, rgba(96,165,250,0.12), rgba(96,165,250,0));
+}
 
 .about-hero .hero-content h1,
 .services-hero .hero-content h1 {
@@ -185,6 +192,11 @@
 .service-content { padding: 16px; }
 .service-features { margin: 12px 0 0; padding-left: 18px; color: var(--muted); }
 .service-features li { margin-bottom: 6px; }
+
+/* Services text contrast */
+.service-card p { color: #cfe3ff; }
+.service-features { color: #cfe3ff; }
+.service-features li { color: #cfe3ff; }
 
 /* CTA Section */
 .cta-section {
