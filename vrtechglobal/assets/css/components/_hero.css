@@ -19,6 +19,9 @@
     animation: fadeIn 0.8s ease-in-out;
 }
 
+/* Fallback: show first slide if JS slider hasn't activated */
+.hero-slider .hero-slide:first-child { display: block; }
+
 .hero-slide.active {
     display: block;
 }

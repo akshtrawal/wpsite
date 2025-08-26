@@ -15,8 +15,9 @@
 
 	ready(function(){
         // Import component scripts
-        loadScript('assets/js/components/hero-slider.js');
-        loadScript('assets/js/components/stats-counter.js');
+        const themeUri = document.documentElement.getAttribute('data-theme-uri') || '';
+        loadScript((themeUri ? themeUri + '/' : '') + 'assets/js/components/hero-slider.js');
+        loadScript((themeUri ? themeUri + '/' : '') + 'assets/js/components/stats-counter.js');
         
         // Initialize mobile navigation
         initMobileNav();
