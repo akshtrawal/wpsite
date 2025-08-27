@@ -11,15 +11,8 @@
 	--primary-700: #14b8a6;
 	--accent: #60a5fa;
 	--danger: #ef4444;
+	--header-offset: 64px;
 }
-
-/* Import Component Stylesheets */
-@import url('components/_utilities.css');
-@import url('components/_header.css');
-@import url('components/_hero.css');
-@import url('components/_sections.css');
-@import url('components/_footer.css');
-@import url('components/_newsletter.css');
 
 /* Additional Global Styles */
 .page-hero.small { 
@@ -87,6 +80,25 @@
 *:focus {
     outline: 2px solid var(--primary);
     outline-offset: 2px;
+}
+
+/* Anchor offset for sticky header */
+[id] {
+	scroll-margin-top: calc(var(--header-offset, 64px) + 8px);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+	* {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+
+	.scroll-progress {
+		transition: none !important;
+	}
 }
 
 /* Print Styles */
